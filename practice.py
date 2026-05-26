@@ -1,97 +1,99 @@
+import pandas as pd
+from data import people
 
-
-#i learnt slicing ex. -> df.loc[0:2, "hobbyist": "employment"]
-#i learnt df.set_inde("email", inplace = True) idk what it does 
-# this seems to work for real work scenearios -> high_salary = print(df ["salary"] > 70000)
-#^ print(df.loc["high_salary", ["country", "prgramworkedwith", "salary"]])  --> try to recall what would be shown and what it will do 
-#filter is very immportant 
-#updating rows 
-#adding and removing colmns, Ex. ->  df["first"] + ' ' + df["last"]
-#adding and removing rows, Ex. ->
-#sort by 
-#grouping and aggreagting 
-
-
-import pandas as pd 
-from data import people 
-
+# ── SETUP ─────────────────────────────────────────────────────────────────────
 df = pd.DataFrame(people)
-#df.set_index("email", inplace=True)
 
-print(df)
-# print(df["email"])     
-print(df.iloc[0:2])          
+# set_index makes email the row label instead of 0, 1, 2
+# useful when email is a unique identifier (like a primary key in SQL)
+df.set_index("email", inplace=True)
 
-filter = (df["country"] == "USA") | (df["country"] == "Canada")
-print(df.loc[filter])
+# ── SLICING ───────────────────────────────────────────────────────────────────
+# iloc = position based (first 2 rows)
+print(df.iloc[0:2])
 
+# loc = label based (only works after set_index)
+print(df.loc["mike@email.com"])
 
+# ── FILTERING ─────────────────────────────────────────────────────────────────
+# OR filter — SQL equivalent: WHERE country = 'USA' OR country = 'Canada'
+usa_or_canada = (df["country"] == "USA") | (df["country"] == "Canada")
+print(df.loc[usa_or_canada])
 
-filter = df["salary"] > 80000
-print(df.loc[filter, ["first", "salary"]])
+# AND filter — SQL equivalent: WHERE country = 'USA' AND salary > 90000
+usa_high_salary = (df["country"] == "USA") & (df["salary"] > 90000)
+print(df.loc[usa_high_salary, ["first", "salary"]])
 
-#print(df.loc["mike@email.com"]) 
- 
-filter = (df["country"] == "USA") &  (df["salary"] > 90000)
-print(df.loc[filter , ["first" , "salary"]])
+# filter by salary threshold
+high_salary = df["salary"] > 80000
+print(df.loc[high_salary, ["first", "salary"]])
 
-desc_salary = df.sort_values("salary" , ascending = False) 
+# USA earners above 70000 — show name, country, salary
+usa_70k = (df["country"] == "USA") & (df["salary"] > 70000)
+print(df.loc[usa_70k, ["first", "country", "salary"]])
+
+# ── SORTING ───────────────────────────────────────────────────────────────────
+# sort by salary descending
+desc_salary = df.sort_values("salary", ascending=False)
 print(desc_salary)
- 
-df.loc[0, "salary"] = 95000 
-print(df)
 
-average_salary = df.groupby("country")["salary"].mean()
-print(average_salary)
-
-first_last = df["first"]+" " + df["last"]
-print(first_last)
-
-people = {
-    "first": ["lara", "jhonny"],
-    "last": ["Smith", "marks"],
-    "email": ["lara@email" , "jhonny@email"],
-    "salary" : [8000000 , 80000 ],
-    "country" : ["USA" , "Europe"]
-}
-df2 = pd.DataFrame(people)
-print(df2)
-combined = pd.concat([df, df2], ignore_index=True)
-print(combined)
-sort = df2.sort_values(by = "last")
-print(sort)
-
-#sort
+# sort by country A-Z, then salary high to low within each country
 sort_country_salary = df.sort_values(
     by=["country", "salary"],
     ascending=[True, False]
 )
 print(sort_country_salary)
 
-#grouping and aggreagting, value_count important
+# ── UPDATING ROWS ─────────────────────────────────────────────────────────────
+# update a specific row — SQL equivalent: UPDATE table SET salary = 95000 WHERE email = 'mike@email.com'
+df.loc["mike@email.com", "salary"] = 95000
 
+# ── ADDING COLUMNS ────────────────────────────────────────────────────────────
+# combine first and last into full name
+df["full_name"] = df["first"] + " " + df["last"]
+print(df["full_name"])
 
-print(df2["salary"].count())
+# ── GROUPING & AGGREGATING ────────────────────────────────────────────────────
+# average salary per country — SQL equivalent: SELECT country, AVG(salary) FROM df GROUP BY country
+avg_salary = df.groupby("country")["salary"].mean()
+print(avg_salary)
 
-
-#this is something i cant do beacuse i dont have the datascheme but this is some overview of what certain code can do 
-#df["salary"].median 
-#df.describe ->  gives us valuable math kind data 
-#df.["salary"].count() -> this gives us the count(amount) of peopele who answered the salry question if we had the data scheeme file
-#df["hobbies"].values_counts() -> for this one its "yes" or "no" questions meaning this will coutn the amount of yes's and no's (dosnt have to be)
-#country_grp = df.groupby(["country"])
-#country_grp.get_group("USA") -> we get results of only "USA" salry, hobbies etc.. 
-#filt = df["country"] == "USA"
-    #  ^ df.loc[filt]["socialmedia"].value_counts() collumn 84 and 85 has a code where we get the most popular apps in the "USA"
-#country_grp["socialmedia"].value_counts().loc["india"] -> we get the most popular websites from each country if we didnt add "loc.india"
-#country_grp["salary"].median -> we get median slary from each country 
-#filt = df["country"]
-    #df.loc[filt]["languagesworkedwith"].str contains("python").sum() 88 - 89 grab those people that either use or do not use pyton 
-#he also did a problem where he gets the percentage of people that know python in each country 
-#percentage_of_python = df.groupby("country")["languagesworkedwith"].str.contains("Python").mean() * 100
-filter = (df["country"] == "USA") & (df["salary"] > 70000) 
-print(df.loc[filter , ["first" , "country", "salary"]])
+# median salary per country sorted highest to lowest
 median_salary = df.groupby("country")["salary"].median().sort_values(ascending=False)
 print(median_salary)
 
-java_users = df.groupby("country")["languagesworkedwith"].str.contains("java").mean()
+# count of rows — SQL equivalent: SELECT COUNT(*) FROM df
+print(df["salary"].count())
+
+# distribution of a categorical column — good for yes/no columns
+# print(df["hobbyist"].value_counts())
+
+# ── CONCAT (adding rows) ──────────────────────────────────────────────────────
+# SQL equivalent: UNION ALL
+new_people = {
+    "first": ["lara", "johnny"],
+    "last": ["Smith", "marks"],
+    "email": ["lara@email.com", "johnny@email.com"],
+    "salary": [8000000, 80000],
+    "country": ["USA", "Europe"]
+}
+df2 = pd.DataFrame(new_people).set_index("email")
+combined = pd.concat([df, df2])
+print(combined)
+
+# ── STRING FILTERING ──────────────────────────────────────────────────────────
+# str.contains = SQL equivalent of LIKE '%value%'
+# percentage of people per country who use Python
+# True = 1, False = 0, so .mean() gives a proportion, * 100 gives percentage
+percentage_python = (
+    df.groupby("country")["languagesworkedwith"]
+    .apply(lambda x: x.str.contains("Python", na=False).mean() * 100)
+)
+print(percentage_python)
+
+# percentage of people per country who use JavaScript
+percentage_javascript = (
+    df.groupby("country")["languagesworkedwith"]
+    .apply(lambda x: x.str.contains("JavaScript", na=False).mean() * 100)
+)
+print(percentage_javascript)
