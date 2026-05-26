@@ -1,0 +1,17 @@
+people = [
+    {"first": "Jake", "last": "Smith", 
+     "email": "jake@email.com", "salary": 85000, 
+     "country": "USA"},
+    {"first": "Sarah", "last": "Jones", 
+     "email": "sarah@email.com", "salary": 45000, 
+     "country": "UK"},
+    {"first": "Mike", "last": "Johnson", 
+     "email": "mike@email.com", "salary": 95000, 
+     "country": "USA"},
+    {"first": "Emily", "last": "Davis", 
+     "email": "emily@email.com", "salary": 35000, 
+     "country": "Canada"},
+    {"first": "Chris", "last": "Wilson", 
+     "email": "chris@email.com", "salary": 120000, 
+     "country": "USA"},
+]
