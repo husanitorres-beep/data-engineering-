@@ -1,21 +1,21 @@
 import pandas as pd
 from data import people
 
-# ── SETUP ─────────────────────────────────────────────────────────────────────
+# --- SETUP ---
 df = pd.DataFrame(people)
 
 # set_index makes email the row label instead of 0, 1, 2
 # useful when email is a unique identifier (like a primary key in SQL)
 df.set_index("email", inplace=True)
 
-# ── SLICING ───────────────────────────────────────────────────────────────────
+# --- SLICING ---
 # iloc = position based (first 2 rows)
 print(df.iloc[0:2])
 
 # loc = label based (only works after set_index)
 print(df.loc["mike@email.com"])
 
-# ── FILTERING ─────────────────────────────────────────────────────────────────
+# --- FILTERING ---
 # OR filter — SQL equivalent: WHERE country = 'USA' OR country = 'Canada'
 usa_or_canada = (df["country"] == "USA") | (df["country"] == "Canada")
 print(df.loc[usa_or_canada])
@@ -32,7 +32,7 @@ print(df.loc[high_salary, ["first", "salary"]])
 usa_70k = (df["country"] == "USA") & (df["salary"] > 70000)
 print(df.loc[usa_70k, ["first", "country", "salary"]])
 
-# ── SORTING ───────────────────────────────────────────────────────────────────
+# --- SORTING ---
 # sort by salary descending
 desc_salary = df.sort_values("salary", ascending=False)
 print(desc_salary)
@@ -44,16 +44,16 @@ sort_country_salary = df.sort_values(
 )
 print(sort_country_salary)
 
-# ── UPDATING ROWS ─────────────────────────────────────────────────────────────
+# -- UPDATING ROWS ---
 # update a specific row — SQL equivalent: UPDATE table SET salary = 95000 WHERE email = 'mike@email.com'
 df.loc["mike@email.com", "salary"] = 95000
 
-# ── ADDING COLUMNS ────────────────────────────────────────────────────────────
+# -- ADDING COLUMNS ---
 # combine first and last into full name
 df["full_name"] = df["first"] + " " + df["last"]
 print(df["full_name"])
 
-# ── GROUPING & AGGREGATING ────────────────────────────────────────────────────
+# --- GROUPING & AGGREGATING ---
 # average salary per country — SQL equivalent: SELECT country, AVG(salary) FROM df GROUP BY country
 avg_salary = df.groupby("country")["salary"].mean()
 print(avg_salary)
@@ -68,7 +68,7 @@ print(df["salary"].count())
 # distribution of a categorical column — good for yes/no columns
 # print(df["hobbyist"].value_counts())
 
-# ── CONCAT (adding rows) ──────────────────────────────────────────────────────
+# --- CONCAT (adding rows) ---
 # SQL equivalent: UNION ALL
 new_people = {
     "first": ["lara", "johnny"],
@@ -81,7 +81,7 @@ df2 = pd.DataFrame(new_people).set_index("email")
 combined = pd.concat([df, df2])
 print(combined)
 
-# ── STRING FILTERING ──────────────────────────────────────────────────────────
+# --- STRING FILTERING ----
 # str.contains = SQL equivalent of LIKE '%value%'
 # percentage of people per country who use Python
 # True = 1, False = 0, so .mean() gives a proportion, * 100 gives percentage
