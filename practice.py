@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 from data import people
 
 # --- SETUP ---
@@ -97,3 +98,7 @@ percentage_javascript = (
     .apply(lambda x: x.str.contains("JavaScript", na=False).mean() * 100)
 )
 print(percentage_javascript)
+filter = (df["country"] == "Canada") | (df["salary"] > 90000)
+print(df.loc[filter , ["first", "salary" , "country"]])
+
+df.groupby["salary_level] df.count()
