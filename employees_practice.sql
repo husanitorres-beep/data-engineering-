@@ -34,5 +34,10 @@ where first_name = 'Amy'
 select * from employees 
 
 
+select first_name , salary, departmnets, avg(salary), over (partition by department) as avg_dept_salary 
+from employees .
+group by departmnets, first_name, salary , avg_dept_salary 
+having avg(avg_dept_salary) > 50000
+
 
 
