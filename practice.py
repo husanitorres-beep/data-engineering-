@@ -101,4 +101,4 @@ print(percentage_javascript)
 filter = (df["country"] == "Canada") | (df["salary"] > 90000)
 print(df.loc[filter , ["first", "salary" , "country"]])
 
-df.groupby["salary_level] df.count()
+grouped_salary = (df.groupby ("salary_level") df.count())
