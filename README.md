@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # 🥪 The Jaffle Shop 🦘
 
 _powered by the dbt Fusion engine_
@@ -10,3 +11,7 @@ To get started:
 
 > [!NOTE]
 > If you're brand-new to dbt, we recommend starting with the [dbt Learn](https://learn.getdbt.com/) platform. It's a free, interactive way to learn dbt, and it's a great way to get started if you're new to the tool.
+=======
+# data-engineering-
+Data engineering journey. Building in public.
+>>>>>>> f408e10e36a593821cb631aefd6bb7e7948f3df5

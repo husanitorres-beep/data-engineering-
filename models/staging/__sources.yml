@@ -1,6 +1,5 @@
 version: 2
 
-# Try using these source definitions instead!
 sources:
   - name: ecom
     schema: "{{ target.schema }}_raw"
@@ -21,3 +20,13 @@ sources:
         description: One record per SKU for items sold in stores
       - name: raw_supplies
         description: One record per supply per SKU of items sold in stores
+
+  - name: chewco
+    schema: public
+    description: Data for the ChewCo gum company
+    tables:
+      - name: products
+      - name: stores
+      - name: employee
+      - name: sales
+      - name: departments

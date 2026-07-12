@@ -12,20 +12,20 @@ renamed as (
     select
 
         ----------  ids
-        id as order_id,
-        store_id as location_id,
-        customer as customer_id,
+        "ID" as order_id,
+        "STORE_ID" as location_id,
+        "CUSTOMER" as customer_id,
 
         ---------- numerics
-        subtotal as subtotal_cents,
-        tax_paid as tax_paid_cents,
-        order_total as order_total_cents,
-        {{ cents_to_dollars('subtotal') }} as subtotal,
-        {{ cents_to_dollars('tax_paid') }} as tax_paid,
-        {{ cents_to_dollars('order_total') }} as order_total,
+        "SUBTOTAL" as subtotal_cents,
+        "TAX_PAID" as tax_paid_cents,
+        "ORDER_TOTAL" as order_total_cents,
+        {{ cents_to_dollars('"SUBTOTAL"') }} as subtotal,
+        {{ cents_to_dollars('"TAX_PAID"') }} as tax_paid,
+        {{ cents_to_dollars('"ORDER_TOTAL"') }} as order_total,
 
         ---------- timestamps
-        cast(ordered_at as date) as order_date
+        cast("ORDERED_AT" as date) as order_date
 
     from source
 
